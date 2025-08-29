@@ -146,7 +146,9 @@ Contact ASAP!"""
     except Exception as e:
         print(f"WhatsApp sending error: {e}")
         return {"status": "error", "detail": str(e)}
-
+@app.get("/")
+def read_root():
+    return {"message": "FastAPI backend is working!"}
 @app.post("/submit-details")
 def submit_details(details: DetailsRequest, request: Request):
     # Debug logging
