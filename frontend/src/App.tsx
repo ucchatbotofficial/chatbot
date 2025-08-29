@@ -15,7 +15,7 @@ const courses = [
   'Other',
 ];
 
-const logoUrl = '/urbancode logo.jpg';
+// const logoUrl = '/urbancode logo.jpg';
 
 function App() {
   // Ref for auto-scroll
@@ -25,7 +25,7 @@ function App() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [course, setCourse] = useState('');
-  const [phone, setPhone] = useState('');
+  // const [phone, setPhone] = useState('');
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([
     { 
@@ -188,7 +188,7 @@ function App() {
       }
       
       const formattedPhone = formatPhone(input);
-      setPhone(formattedPhone);
+      // setPhone(formattedPhone);
       console.log("Phone number captured:", formattedPhone);
       addMessage('user', input);
       setShowThankYou(true);
