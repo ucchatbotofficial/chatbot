@@ -208,7 +208,7 @@ function App() {
         
         console.log("Sending enquiry data:", enquiryData);
         
-        const res = await fetch('http://localhost:8000/submit-details', {
+        const res = await fetch('https://chatbot-uz71.onrender.com/submit-details', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(enquiryData)
@@ -216,7 +216,7 @@ function App() {
         
         if (!res.ok) {  
           console.log("Main email endpoint failed, trying alternative...");
-          const altRes = await fetch('http://localhost:8000/submit-details-alternative', {
+          const altRes = await fetch('https://chatbot-uz71.onrender.com/submit-details-alternative', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(enquiryData)
