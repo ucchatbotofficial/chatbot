@@ -20,7 +20,7 @@ const courses = [
 function App() {
   // Ref for auto-scroll
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [step, setStep] = useState(0);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -245,7 +245,7 @@ function App() {
   return (
     <>
       {/* Floating Chatbot Icon/Button */}
-      {!open && (
+      {/* {!open && (
         <button
           className="chatbot-fab"
           onClick={() => setOpen(true)}
@@ -283,7 +283,7 @@ function App() {
             }}
           />
         </button>
-      )}
+      )} */}
       {/* Chat Window */}
       {open && (
         <div className="chatbot-window-modern">
