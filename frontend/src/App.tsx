@@ -412,20 +412,22 @@ function App() {
               filter: drop-shadow(0 8px 16px rgba(26, 183, 157, 0.4));
             }
             .chatbot-window-modern {
-              width: 380px;
-              height: 580px;
-              background: #fff;
-              border-radius: 16px;
-              box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-              display: flex;
-              flex-direction: column;
-              z-index: 1001;
-              overflow: hidden;
-              transform: none !important;
-              transform-origin: bottom right;
-              margin: 0 !important;
-              animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                width: 100%;
+  max-width: 380px;       /* limits size on desktop */
+  height: 100%;
+  max-height: 580px;      /* limits size on desktop */
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  z-index: 1001;
+  overflow: hidden;       /* ✅ no scrollbars inside container */
+  margin: 0 auto;         /* ✅ center in page flow */
+  transform: none !important;
+  animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             }
+              
             @keyframes slideIn {
               from {
                 opacity: 0;
@@ -728,11 +730,13 @@ function App() {
             /* Responsive design */
             @media (max-width: 480px) {
               .chatbot-window-modern {
-                width: calc(100vw - 32px);
-                height: calc(100vh - 64px);
-                bottom: 16px;
-                right: 16px;
-                left: 16px;
+                 width: 100vw;          /* ✅ full width on mobile */
+    height: 100vh;         /* ✅ full height on mobile */
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;      /* remove rounded corners */
+    box-shadow: none;      /* remove shadow */
+    margin: 0;  
               }
               .chatbot-fab {
                 bottom: 16px;
