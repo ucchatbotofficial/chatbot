@@ -268,7 +268,7 @@ function App() {
           }}
         >
           <img
-            src="/get.jpeg"
+            src="/get.png"
             alt="Chatbot"
             style={{
               width: 56,
@@ -290,7 +290,7 @@ function App() {
           <div className="chatbot-header-modern">
             <div className="chatbot-header-left">
               <div className="chatbot-avatar-modern">
-                <img src="/urbancode logo.jpg" alt="logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                <img src="/urbancode-logo.jpg" alt="logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
               </div>
               <span className="chatbot-title-modern">Urbancode Assistant</span>
             </div>
@@ -312,7 +312,7 @@ function App() {
               <div key={i} className={`chatbot-msg-modern ${msg.role}`}>
                 {msg.role === 'bot' && (
                   <div className="chatbot-avatar-small">
-                    <img src="/get.jpeg" alt="logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                    <img src="/get.png" alt="logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                   </div>
                 )}
                 <div className="chatbot-msg-content">
@@ -325,7 +325,7 @@ function App() {
               <div className="thankyou-message-modern">
                 <div>Thank you for sharing the details, We will be sharing the course details to your WhatsApp.</div>
                 <div style={{ fontWeight: 700, margin: '16px 0 8px 0', fontSize: '1.1rem' }}>Dream big, learn bigger.</div>
-                    <img src="/urbancode logo.jpg" alt="logo" style={{ width: 120, height: 120, borderRadius: 24, margin: '0 auto', display: 'block', background: '#fff' }} />
+                    <img src="/urbancode-logo.jpg" alt="logo" style={{ width: 120, height: 120, borderRadius: 24, margin: '0 auto', display: 'block', background: '#fff' }} />
                 <div style={{ color: '#1AB79D', marginTop: 12, fontWeight: 600, fontSize: '1.1rem' }}>Empowering Your Future, One Course at a Time.</div>
                 {sending && <div style={{ color: '#1AB79D', marginTop: 12 }}>Sending details to email and WhatsApp...</div>}
                 {error && <div style={{ color: 'red', marginTop: 12 }}>{error}</div>}
