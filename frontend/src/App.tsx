@@ -372,11 +372,7 @@ function App() {
           )}
           <style>{`
             .chatbot-fab {
-              position: fixed !important;
-              bottom: 24px !important;
-              right: 24px !important;
-              left: auto !important;
-              top: auto !important;
+            
               z-index: 9999 !important;
               background: transparent;
               border: none;
@@ -416,7 +412,6 @@ function App() {
               filter: drop-shadow(0 8px 16px rgba(26, 183, 157, 0.4));
             }
             .chatbot-window-modern {
-              
               width: 380px;
               height: 580px;
               background: #fff;
@@ -747,11 +742,7 @@ function App() {
             
             /* Force bottom right positioning - override any conflicting styles */
             .chatbot-fab {
-              position: fixed !important;
-              bottom: 20px !important;
-              right: 20px !important;
-              left: auto !important;
-              top: auto !important;
+              
               z-index: 1000;
               background: transparent;
               border: none;
@@ -767,11 +758,7 @@ function App() {
             }
             
             .chatbot-window-modern {
-              position: fixed !important;
-              bottom: 32px !important;
-              right: 32px !important;
-              left: auto !important;
-              top: auto !important;
+              
               transform: none !important;
               margin: 0 !important;
             }
