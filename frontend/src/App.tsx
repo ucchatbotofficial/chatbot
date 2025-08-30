@@ -243,9 +243,7 @@ function App() {
             </div>
             <div className="chatbot-header-right">
               <button className="chatbot-icon-btn-modern" title="Minimize">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 12H18" stroke="#666" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
+                
               </button>
               <button className="chatbot-icon-btn-modern" title="Refresh" onClick={() => window.location.reload()}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
