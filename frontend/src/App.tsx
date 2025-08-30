@@ -416,11 +416,7 @@ function App() {
               filter: drop-shadow(0 8px 16px rgba(26, 183, 157, 0.4));
             }
             .chatbot-window-modern {
-              position: fixed !important;
-              bottom: 20px !important;
-              right: 20px !important;
-              left: auto !important;
-              top: auto !important;
+              
               width: 380px;
               height: 580px;
               background: #fff;
