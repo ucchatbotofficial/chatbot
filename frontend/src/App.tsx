@@ -17,7 +17,7 @@ const courses = [
 
 function App() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [step, setStep] = useState(0);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -56,14 +56,13 @@ function App() {
     setMessages(msgs => [...msgs, { role, content, timestamp: new Date() }]);
   };
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, showThankYou]);
 
-  // Validation functions (unchanged)
+  // Validation functions
   const validateName = (name: string): string | null => {
     const trimmedName = name.trim();
     if (!trimmedName) {
@@ -84,6 +83,7 @@ function App() {
       return "Email cannot be empty.";
     }
     
+    // Email regex pattern
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(trimmedEmail)) {
       return "Please enter a valid email format (e.g., name@example.com).";
@@ -97,8 +97,10 @@ function App() {
       return "Phone number cannot be empty.";
     }
     
+    // Remove any spaces, dashes, or other characters
     const cleanPhone = trimmedPhone.replace(/[\s\-\(\)]/g, '');
     
+    // Check if it starts with +91
     if (cleanPhone.startsWith('+91')) {
       const digits = cleanPhone.substring(3);
       if (!/^\d{10}$/.test(digits)) {
@@ -107,8 +109,9 @@ function App() {
       return null;
     }
     
+    // Check if it's just 10 digits (we'll add +91 automatically)
     if (/^\d{10}$/.test(cleanPhone)) {
-      return null;
+      return null; // Valid - we'll add +91 prefix
     }
     
     return "Please enter phone number in format: +91 followed by 10 digits (e.g., +91 9876543210) or just 10 digits.";
@@ -122,10 +125,10 @@ function App() {
     if (/^\d{10}$/.test(cleanPhone)) {
       return `+91${cleanPhone}`;
     }
-    return phone;
+    return phone; // Return as-is if invalid (validation should catch this)
   };
 
-  const handleSend = async () => {
+   const handleSend = async () => {
     if (!input.trim()) return;
     
     if (step === 0) {
@@ -191,8 +194,6 @@ function App() {
           phone: formattedPhone
         };
         
-        console.log("Sending enquiry data:", enquiryData);
-        
         const res = await fetch('https://chatbot-uz71.onrender.com/submit-details', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -200,7 +201,6 @@ function App() {
         });
         
         if (!res.ok) {  
-          console.log("Main email endpoint failed, trying alternative...");
           const altRes = await fetch('https://chatbot-uz71.onrender.com/submit-details-alternative', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -229,21 +229,6 @@ function App() {
 
   return (
     <>
-      {/* Floating Chat Button */}
-      {!open && (
-        <button
-          className="chatbot-fab"
-          onClick={() => setOpen(true)}
-          aria-label="Open chatbot"
-        >
-          <div className="fab-icon-container">
-            <img src="/get.png" alt="Chat" className="fab-icon" />
-          </div>
-          <span className="pulse-ring"></span>
-        </button>
-      )}
-      
-      {/* Chat Window */}
       {open && (
         <div className="chatbot-window-modern">
           <div className="chatbot-header-modern">
@@ -253,25 +238,41 @@ function App() {
               </div>
               <div className="chatbot-title-container">
                 <span className="chatbot-title-modern">Urbancode Assistant</span>
-                <span className="chatbot-status">Online • Typically replies instantly</span>
+                <span className="chatbot-status">Online</span>
               </div>
             </div>
             <div className="chatbot-header-right">
+              <button className="chatbot-icon-btn-modern" title="Minimize">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 12H18" stroke="#666" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </button>
               <button className="chatbot-icon-btn-modern" title="Refresh" onClick={() => window.location.reload()}>
-                <span className="icon-refresh">↻</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 4v6h6" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M23 20v-6h-6" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </button>
               <button className="chatbot-icon-btn-modern" title="Close" onClick={() => setOpen(false)}>
-                <span className="icon-close">×</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 6L6 18M6 6L18 18" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </button>
             </div>
           </div>
           
           <div className="chatbot-messages-modern">
+            <div className="welcome-banner">
+              <h3>Welcome to Urbancode!</h3>
+              <p>How can I assist you today?</p>
+            </div>
+            
             {messages.map((msg, i) => (
               <div key={i} className={`chatbot-msg-modern ${msg.role}`}>
                 {msg.role === 'bot' && (
                   <div className="chatbot-avatar-small">
-                    <img src="/get.png" alt="Bot" />
+                    <img src="/get.png" alt="Assistant" />
                   </div>
                 )}
                 <div className="chatbot-msg-content">
@@ -283,12 +284,15 @@ function App() {
             
             {showThankYou && (
               <div className="thankyou-message-modern">
-                <div className="thankyou-title">Thank you for sharing your details!</div>
-                <div className="thankyou-text">We will be sharing the course details to your WhatsApp shortly.</div>
-                <div className="thankyou-quote">Dream big, learn bigger.</div>
-                <img src="/urbancode-logo.jpg" alt="Urbancode Logo" className="thankyou-logo" />
-                <div className="thankyou-footer">Empowering Your Future, One Course at a Time.</div>
-                {sending && <div className="sending-indicator">Sending details to email and WhatsApp...</div>}
+                <div className="thankyou-icon">✓</div>
+                <h3>Thank you for your inquiry!</h3>
+                <p>We will be sharing the course details to your WhatsApp shortly.</p>
+                <div className="signature">
+                  <p className="tagline">Dream big, learn bigger.</p>
+                  <img src="/urbancode-logo.jpg" alt="Urbancode Logo" className="logo" />
+                  <p className="mission">Empowering Your Future, One Course at a Time.</p>
+                </div>
+                {sending && <div className="sending-indicator">Sending details...</div>}
                 {error && <div className="error-message">{error}</div>}
               </div>
             )}
@@ -296,486 +300,43 @@ function App() {
           </div>
           
           {!showThankYou && (
-            <div className="chatbot-input-row-modern">
+            <div className="chatbot-input-container">
               {step === 2 ? (
-                <div className="course-dropdown-container">
-                  <label className="course-dropdown-label">Please Select your course:</label>
-                  <select 
-                    className="course-dropdown"
-                    onChange={(e) => handleCourseSelect(e.target.value)}
-                    value={course}
-                  >
-                    <option value="">Select a course...</option>
+                <div className="course-selection">
+                  <p className="instruction">Please select your course:</p>
+                  <div className="course-options">
                     {courses.map(c => (
-                      <option key={c} value={c}>{c}</option>
+                      <button 
+                        key={c} 
+                        className={`course-option ${course === c ? 'selected' : ''}`}
+                        onClick={() => handleCourseSelect(c)}
+                      >
+                        {c}
+                      </button>
                     ))}
-                  </select>
+                  </div>
                 </div>
               ) : (
-                <>
+                <div className="input-group">
                   <input
                     type={step === 1 ? 'email' : step === 3 ? 'tel' : 'text'}
                     value={input}
                     onChange={e => setInput(e.target.value)}
-                    placeholder="Type your response..."
+                    placeholder={step === 0 ? "Enter your name..." : step === 1 ? "Enter your email..." : "Enter your phone number..."}
                     onKeyDown={e => e.key === 'Enter' && handleSend()}
-                    className="chatbot-input-modern"
+                    className="chat-input"
                   />
-                  <button onClick={handleSend} className="send-btn-modern" disabled={!input.trim()}>
-                    <span className="send-icon">→</span>
+                  <button onClick={handleSend} className="send-button" disabled={!input.trim()}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
                   </button>
-                </>
+                </div>
               )}
             </div>
           )}
         </div>
       )}
-      
-      <style>{`
-        /* Floating Action Button */
-        .chatbot-fab {
-          position: fixed;
-          bottom: 24px;
-          right: 24px;
-          z-index: 9999;
-          background: #1AB79D;
-          border: none;
-          border-radius: 50%;
-          width: 60px;
-          height: 60px;
-          cursor: pointer;
-          box-shadow: 0 4px 20px rgba(26, 183, 157, 0.3);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.3s ease;
-          animation: float 3s ease-in-out infinite;
-        }
-        
-        .chatbot-fab:hover {
-          transform: scale(1.1);
-          box-shadow: 0 6px 24px rgba(26, 183, 157, 0.4);
-        }
-        
-        .fab-icon-container {
-          width: 30px;
-          height: 30px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        
-        .fab-icon {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-        
-        .pulse-ring {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          background: rgba(26, 183, 157, 0.4);
-          animation: pulse 2s infinite;
-          z-index: -1;
-        }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-8px); }
-        }
-        
-        @keyframes pulse {
-          0% { transform: scale(1); opacity: 0.8; }
-          70% { transform: scale(1.5); opacity: 0; }
-          100% { transform: scale(1.5); opacity: 0; }
-        }
-        
-        /* Chat Window */
-        .chatbot-window-modern {
-          position: fixed;
-          bottom: 100px;
-          right: 24px;
-          width: 380px;
-          height: 580px;
-          background: #fff;
-          border-radius: 16px;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-          display: flex;
-          flex-direction: column;
-          z-index: 10000;
-          overflow: hidden;
-          animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px) scale(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-        
-        /* Header */
-        .chatbot-header-modern {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 16px 20px;
-          background: #fff;
-          border-bottom: 1px solid #f0f0f0;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-        
-        .chatbot-header-left {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-        
-        .chatbot-avatar-modern {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          overflow: hidden;
-          background: #f0f0f0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        
-        .chatbot-avatar-modern img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        
-        .chatbot-title-container {
-          display: flex;
-          flex-direction: column;
-        }
-        
-        .chatbot-title-modern {
-          font-size: 16px;
-          font-weight: 600;
-          color: #333;
-        }
-        
-        .chatbot-status {
-          font-size: 12px;
-          color: #1AB79D;
-          margin-top: 2px;
-        }
-        
-        .chatbot-header-right {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        
-        .chatbot-icon-btn-modern {
-          background: none;
-          border: none;
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: background 0.2s;
-          font-size: 18px;
-          color: #666;
-        }
-        
-        .chatbot-icon-btn-modern:hover {
-          background: #f5f5f5;
-        }
-        
-        /* Messages Area */
-        .chatbot-messages-modern {
-          flex: 1;
-          padding: 20px;
-          overflow-y: auto;
-          background: #fafafa;
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-        
-        .chatbot-msg-modern {
-          display: flex;
-          align-items: flex-start;
-          gap: 10px;
-        }
-        
-        .chatbot-msg-modern.user {
-          flex-direction: row-reverse;
-        }
-        
-        .chatbot-avatar-small {
-          width: 28px;
-          height: 28px;
-          border-radius: 50%;
-          overflow: hidden;
-          background: #f0f0f0;
-          flex-shrink: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        
-        .chatbot-avatar-small img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        
-        .chatbot-msg-content {
-          display: flex;
-          flex-direction: column;
-          max-width: 70%;
-        }
-        
-        .chatbot-msg-bubble {
-          padding: 12px 16px;
-          border-radius: 18px;
-          font-size: 14px;
-          line-height: 1.4;
-          word-wrap: break-word;
-          animation: messageAppear 0.3s ease-out;
-        }
-        
-        @keyframes messageAppear {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        .chatbot-msg-modern.bot .chatbot-msg-bubble {
-          background: #f0f0f0;
-          color: #333;
-          border-bottom-left-radius: 4px;
-        }
-        
-        .chatbot-msg-modern.user .chatbot-msg-bubble {
-          background: #1AB79D;
-          color: #fff;
-          border-bottom-right-radius: 4px;
-        }
-        
-        .chatbot-msg-timestamp {
-          font-size: 11px;
-          color: #999;
-          margin-top: 4px;
-          padding: 0 8px;
-        }
-        
-        .chatbot-msg-modern.user .chatbot-msg-timestamp {
-          text-align: right;
-        }
-        
-        /* Thank You Message */
-        .thankyou-message-modern {
-          text-align: center;
-          padding: 20px;
-          background: #fff;
-          border-radius: 12px;
-          border: 1px solid #e9ecef;
-          margin-top: 10px;
-          animation: fadeIn 0.5s ease-out;
-        }
-        
-        @keyframes fadeIn {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        
-        .thankyou-title {
-          font-weight: 700;
-          font-size: 18px;
-          color: #1AB79D;
-          margin-bottom: 10px;
-        }
-        
-        .thankyou-text {
-          font-size: 14px;
-          color: #333;
-          margin-bottom: 15px;
-        }
-        
-        .thankyou-quote {
-          font-weight: 700;
-          margin: 16px 0;
-          font-size: 16px;
-        }
-        
-        .thankyou-logo {
-          width: 100px;
-          height: 100px;
-          border-radius: 20px;
-          margin: 0 auto;
-          display: block;
-          background: #fff;
-          padding: 8px;
-          border: 1px solid #eee;
-        }
-        
-        .thankyou-footer {
-          color: #1AB79D;
-          margin-top: 15px;
-          font-weight: 600;
-          font-size: 14px;
-        }
-        
-        .sending-indicator {
-          color: #1AB79D;
-          margin-top: 12px;
-          font-size: 13px;
-        }
-        
-        .error-message {
-          color: #ff4d4f;
-          margin-top: 12px;
-          font-size: 13px;
-        }
-        
-        /* Input Area */
-        .chatbot-input-row-modern {
-          display: flex;
-          padding: 16px 20px;
-          border-top: 1px solid #f0f0f0;
-          background: #fff;
-          gap: 12px;
-          align-items: center;
-        }
-        
-        .chatbot-input-modern {
-          flex: 1;
-          padding: 12px 16px;
-          border: 1px solid #e0e0e0;
-          border-radius: 24px;
-          font-size: 14px;
-          outline: none;
-          background: #fff;
-          color: #000;
-          transition: border 0.2s;
-        }
-        
-        .chatbot-input-modern:focus {
-          border-color: #1AB79D;
-          box-shadow: 0 0 0 2px rgba(26, 183, 157, 0.1);
-        }
-        
-        .send-btn-modern {
-          background: #1AB79D;
-          border: none;
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: background 0.2s;
-          flex-shrink: 0;
-        }
-        
-        .send-btn-modern:hover:not(:disabled) {
-          background: #159c86;
-        }
-        
-        .send-btn-modern:disabled {
-          background: #ccc;
-          cursor: not-allowed;
-        }
-        
-        .send-icon {
-          color: white;
-          font-size: 18px;
-          font-weight: bold;
-        }
-        
-        /* Course Dropdown */
-        .course-dropdown-container {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          width: 100%;
-        }
-        
-        .course-dropdown-label {
-          font-size: 14px;
-          font-weight: 500;
-          color: #333;
-          margin-bottom: 4px;
-        }
-        
-        .course-dropdown {
-          padding: 12px 16px;
-          border: 1px solid #e0e0e0;
-          border-radius: 24px;
-          font-size: 14px;
-          outline: none;
-          background: #fff;
-          color: #333;
-          transition: border 0.2s;
-          cursor: pointer;
-          appearance: none;
-          background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-          background-repeat: no-repeat;
-          background-position: right 16px center;
-          background-size: 16px;
-        }
-        
-        .course-dropdown:focus {
-          border-color: #1AB79D;
-          box-shadow: 0 0 0 2px rgba(26, 183, 157, 0.1);
-        }
-        
-        /* Custom scrollbar */
-        .chatbot-messages-modern::-webkit-scrollbar {
-          width: 6px;
-        }
-        
-        .chatbot-messages-modern::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 3px;
-        }
-        
-        .chatbot-messages-modern::-webkit-scrollbar-thumb {
-          background: #1AB79D;
-          border-radius: 3px;
-        }
-        
-        .chatbot-messages-modern::-webkit-scrollbar-thumb:hover {
-          background: #159c86;
-        }
-        
-        /* Responsive design */
-        @media (max-width: 480px) {
-          .chatbot-window-modern {
-            width: calc(100vw - 40px);
-            height: 70vh;
-            right: 20px;
-            bottom: 80px;
-          }
-          
-          .chatbot-fab {
-            bottom: 20px;
-            right: 20px;
-          }
-        }
-      `}</style>
     </>
   );
 }
