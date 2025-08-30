@@ -1,4 +1,7 @@
 /* Modern Chatbot Styles */
+body{
+  background-color: #ffffff;
+}
 .chatbot-window-modern {
   width: 380px;
   height: 600px;
