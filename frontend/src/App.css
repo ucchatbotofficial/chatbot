@@ -328,6 +328,7 @@ body{
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s;
+  border: 1px solid #1ab79d;color: #7e7676;
 }
 
 .course-option:hover {
@@ -352,6 +353,7 @@ body{
   font-size: 14px;
   outline: none;
   transition: border 0.2s;
+  background:#fff;color:#000;
 }
 
 .chat-input:focus {
