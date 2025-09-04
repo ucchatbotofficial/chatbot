@@ -18,7 +18,7 @@ const courses = [
 
 function App() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const [open, setOpen] = useState(true);
+  // const [open, setOpen] = useState(true);
   const [step, setStep] = useState(0);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -230,7 +230,7 @@ function App() {
 
   return (
     <>
-      {open && (
+      
         <div className="chatbot-window-modern">
           <div className="chatbot-header-modern">
             <div className="chatbot-header-left">
@@ -243,23 +243,23 @@ function App() {
               </div>
             </div>
             <div className="chatbot-header-right">
-              <button className="chatbot-icon-btn-modern" title="Minimize">
+              {/* <button className="chatbot-icon-btn-modern" title="Minimize">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M6 12H18" stroke="#666" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
-              </button>
-              <button className="chatbot-icon-btn-modern" title="Refresh" onClick={() => window.location.reload()}>
+              </button> */}
+              {/* <button className="chatbot-icon-btn-modern" title="Refresh" onClick={() => window.location.reload()}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M1 4v6h6" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M23 20v-6h-6" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-              </button>
-              <button className="chatbot-icon-btn-modern" title="Close" onClick={() => setOpen(false)}>
+              </button> */}
+              {/* <button className="chatbot-icon-btn-modern" title="Close" onClick={() => setOpen(false)}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18 6L6 18M6 6L18 18" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-              </button>
+              </button> */}
             </div>
           </div>
           
@@ -337,7 +337,7 @@ function App() {
             </div>
           )}
         </div>
-      )}
+      
     </>
   );
 }
