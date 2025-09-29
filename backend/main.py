@@ -140,27 +140,44 @@ def submit_details(details: DetailsRequest, request: Request):
     print("=== SENDING WHATSAPP NOTIFICATION ===")
     print(f"Sending lead details to WhatsApp: {WHATSAPP_NOTIFICATION_NUMBER}")
 
-    whatsapp_result = send_whatsapp_message(
-        WHATSAPP_NOTIFICATION_NUMBER, 
-        details.name, 
-        details.email, 
-        details.course, 
-        details.phone
-    )
+    numbers = [n.strip() for n in (WHATSAPP_NOTIFICATION_NUMBER or "").split(',') if n.strip()]
+    if not numbers:
+        numbers = [WHATSAPP_NOTIFICATION_NUMBER] if WHATSAPP_NOTIFICATION_NUMBER else []
 
-    if whatsapp_result["status"] == "success":
-        print("✅ WhatsApp notification sent successfully!")
-    else:
-        print(f"❌ WhatsApp notification failed: {whatsapp_result['detail']}")
+    whatsapp_results = []
+    for num in numbers:
+        result = send_whatsapp_message(
+            num,
+            details.name,
+            details.email,
+            details.course,
+            details.phone
+        )
+        status = result.get("status", "error")
+        detail = result.get("detail", "Success")
+        message_id = result.get("message_id")
+        whatsapp_results.append({
+            "to": num,
+            "status": status,
+            "detail": detail,
+            "message_id": message_id
+        })
+        if status == "success":
+            print(f"✅ WhatsApp notification sent successfully to {num}!")
+        else:
+            print(f"❌ WhatsApp notification failed for {num}: {detail}")
+
+    overall_status = "success" if any(r.get("status") == "success" for r in whatsapp_results) else (whatsapp_results[0].get("status") if whatsapp_results else "skipped")
+    overall_detail = ", ".join([f"{r['to']}: {r.get('status')}" for r in whatsapp_results]) if whatsapp_results else "No WhatsApp numbers configured"
 
     return {
         "status": "success",
         "message": "Form submitted successfully! WhatsApp notification attempted.",
-        "whatsapp_status": whatsapp_result["status"],
-        "whatsapp_detail": whatsapp_result.get("detail", "Success")
+        "whatsapp_status": overall_status,
+        "whatsapp_detail": overall_detail,
+        "whatsapp_results": whatsapp_results
     }
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
